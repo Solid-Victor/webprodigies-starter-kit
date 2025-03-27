@@ -1,18 +1,16 @@
 //this is our redux store
 "use client"
-import { combineReducers, configureStore } from "@reduxjs/toolkit"
+import { configureStore } from "@reduxjs/toolkit"
 import { TypedUseSelectorHook, useSelector } from "react-redux"
 
-const rootReducer = combineReducers({
-    //add all your reducers here
-})
+// Import your reducers
+import authReducer from "./features/auth-slice"; // Make sure this exists
+// Add other reducers as needed
 
 export const store = configureStore({
-    reducer: rootReducer,
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-            serializableCheck: false,
-        }),
+    reducer: {
+        auth: authReducer,  // Add your reducers here
+    },
 })
 
 //we export these type definitions

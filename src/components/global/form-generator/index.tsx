@@ -10,10 +10,11 @@ type FormGeneratorProps = {
     options?: { value: string; label: string; id: string }[]
     label?: string
     placeholder: string
-    register: UseFormRegister<any>
+    register: UseFormRegister<FieldValues>
     name: string
     errors: FieldErrors<FieldValues>
     lines?: number
+    required?: boolean
 }
 
 export const FormGenerator = ({
@@ -26,7 +27,13 @@ export const FormGenerator = ({
     errors,
     type,
     lines,
+    required,
 }: FormGeneratorProps) => {
+    if (typeof register !== 'function') {
+        console.error('register prop must be a function from useForm hook');
+        return null;
+    }
+
     switch (inputType) {
         case "input":
             return (
@@ -40,14 +47,14 @@ export const FormGenerator = ({
                         type={type}
                         placeholder={placeholder}
                         className="bg-themeBlack border-themeGray text-themeTextGray"
-                        {...register(name)}
+                        {...register(name, { required: required && "This field is required" })}
                     />
                     <ErrorMessage
                         errors={errors}
                         name={name}
                         render={({ message }) => (
-                            <p className="text-red-400 mt-2">
-                                {message === "Required" ? "" : message}
+                            <p className="text-red-400 text-sm mt-1">
+                                {message}
                             </p>
                         )}
                     />
